@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio Global: Innovación & Resiliencia | GLOBAL MINDS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Interactive Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts: Syne & Plus Jakarta Sans for High-End Luxury Aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ferrariRed: '#D40000',
+                        rolexGreen: '#006039',
+                        rolexGold: '#C5A059',
+                        obsidian: '#0B0B0B',
+                        charcoal: '#161616',
+                        cardBg: '#1C1C1E',
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0B0B;
+            color: #F5F5F7;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .luxury-gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 0%, #C5A059 50%, #E5C585 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        .glass-panel-hover:hover {
+            border-color: rgba(197, 160, 89, 0.6);
+            box-shadow: 0 10px 30px -10px rgba(197, 160, 89, 0.2);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0B0B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A059;
+            border-radius: 4px;
+        }
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: auto;
+        }
+        .page-view {
+            display: none !important;
+            width: 100%;
+        }
+        .page-view.active {
+            display: block !important;
+        }
+        .subpage-view {
+            display: none !important;
+            width: 100%;
+        }
+        .subpage-view.active {
+            display: block !important;
+        }
+    </style>
+</head>
+<body class="selection:bg-rolexGold selection:text-black">
+
+    <!-- Top Executive Header / Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-neutral-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Brand Name Only -->
+            <a href="#" onclick="switchPage('inicio'); return false;" class="flex items-center space-x-3 group cursor-pointer">
+                <div>
+                    <span class="font-syne font-extrabold text-xl tracking-wider text-white">GLOBAL <span class="text-rolexGold">MINDS</span></span>
+                    <span class="block text-[10px] tracking-widest text-neutral-400 uppercase font-mono">International Business Observatory</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#" onclick="switchPage('inicio'); return false;" class="nav-link text-rolexGold hover:text-white transition-colors" data-page="inicio">Inicio</a>
+                
+                <!-- Menú Desplegable 1. Body Lotions -->
+                <div class="relative group py-6">
+                    <button class="nav-link text-neutral-300 hover:text-rolexGold transition-colors flex items-center space-x-2 cursor-pointer" data-page="bodylotions" onclick="switchPage('bodylotions'); switchSubpage('contexto'); return false;">
+                        <span>1. Body Lotions</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </button>
+                    <div class="absolute top-16 left-0 w-64 glass-panel rounded-2xl p-2 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-rolexGold/30 flex flex-col space-y-1">
+                        <a href="#" onclick="switchPage('bodylotions'); switchSubpage('contexto'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-compass text-rolexGold group-hover:text-black"></i>
+                            <span>Contexto & Impulsores</span>
+                        </a>
+                        <a href="#" onclick="switchPage('bodylotions'); switchSubpage('debate'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-scale-balanced text-rolexGold group-hover:text-black"></i>
+                            <span>Debate Globalización</span>
+                        </a>
+                        <a href="#" onclick="switchPage('bodylotions'); switchSubpage('estrategia'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-chess text-rolexGold group-hover:text-black"></i>
+                            <span>Implicaciones Gerenciales</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Menú Desplegable 2. Patente Sísmica -->
+                <div class="relative group py-6">
+                    <button class="nav-link text-neutral-300 hover:text-rolexGold transition-colors flex items-center space-x-2 cursor-pointer" data-page="patentes" onclick="switchPage('patentes'); switchPatentesSub('tecnologia'); return false;">
+                        <span>2. Patente Sísmica</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </button>
+                    <div class="absolute top-16 left-0 w-72 glass-panel rounded-2xl p-2 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-rolexGold/30 flex flex-col space-y-1">
+                        <a href="#" onclick="switchPage('patentes'); switchPatentesSub('tecnologia'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-microchip text-rolexGold group-hover:text-black"></i>
+                            <span>Dispositivo & Pitch (GB2583164)</span>
+                        </a>
+                        <a href="#" onclick="switchPage('patentes'); switchPatentesSub('hill'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-book-open text-rolexGold group-hover:text-black"></i>
+                            <span>Marco Charles Hill & Contexto</span>
+                        </a>
+                        <a href="#" onclick="switchPage('patentes'); switchPatentesSub('ia'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-robot text-rolexGold group-hover:text-black"></i>
+                            <span>Bitácora Debate con IA</span>
+                        </a>
+                        <a href="#" onclick="switchPage('patentes'); switchPatentesSub('negocio'); return false;" class="px-4 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-black hover:bg-rolexGold transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-line text-rolexGold group-hover:text-black"></i>
+                            <span>Modelo de Negocio & Fondo Milagro</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="#" onclick="switchPage('equipo'); return false;" class="nav-link text-neutral-300 hover:text-rolexGold transition-colors" data-page="equipo">Directorio & Equipo</a>
+            </nav>
+
+            <!-- Action / UAO Badge -->
+            <div class="flex items-center space-x-4">
+                <div class="hidden lg:block text-right">
+                    <span class="block text-xs font-bold text-rolexGold">UAO Cali, Colombia</span>
+                    <span class="text-[10px] text-neutral-400">Negocios Internacionales</span>
+                </div>
+                <button onclick="switchPage('bodylotions'); switchSubpage('contexto');" class="px-5 py-2.5 bg-gradient-to-r from-rolexGold to-amber-600 text-black font-semibold rounded text-xs uppercase tracking-wider hover:opacity-95 transition-opacity shadow-md cursor-pointer">
+                    Acceder
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="w-full">
+
+        <!-- ==================== PAGE 1: INICIO ==================== -->
+        <section id="page-inicio" class="page-view active relative h-screen flex items-center justify-center overflow-hidden pt-20">
+            <div class="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black">
+                <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-50 scale-105">
+                    <source src="video-fondo.mp4" type="video/mp4">
+                    Tu navegador no soporta videos HTML5.
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-black/40 to-black/60"></div>
+            </div>
+
+            <div id="webgl-container" style="z-index: 2; pointer-events: none;"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pointer-events-none">
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-panel mb-6 pointer-events-auto border border-rolexGold/30 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-rolexGold animate-pulse"></span>
+                    <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-semibold">Observatorio Global de Inteligencia de Negocios</span>
+                </div>
+                
+                <h1 class="font-syne text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight drop-shadow-2xl">
+                    Observatorio Global: <br><span class="luxury-gradient-text">Cosmeticos & Resiliencia</span>
+                </h1>
+                
+                <p class="max-w-2xl mx-auto text-neutral-200 text-base md:text-lg mb-10 pointer-events-auto font-light leading-relaxed drop-shadow-md">
+                    Plataforma interactiva desarrollada por <strong class="text-white font-semibold">GLOBAL MINDS Consultores</strong> (UAO). Analizando mercados globales y transferencia de tecnología para la mitigación sísmica.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto">
+                    <button onclick="switchPage('bodylotions'); switchSubpage('contexto');" class="w-full sm:w-auto px-8 py-4 bg-rolexGold text-black font-bold rounded text-sm uppercase tracking-wider hover:bg-white transition-all shadow-xl flex items-center justify-center space-x-3 cursor-pointer">
+                        <span>1. Body Lotions</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button onclick="switchPage('patentes'); switchPatentesSub('tecnologia');" class="w-full sm:w-auto px-8 py-4 glass-panel text-white font-semibold rounded text-sm uppercase tracking-wider hover:border-rolexGold transition-all flex items-center justify-center space-x-3 cursor-pointer">
+                        <span>2. Patente Sísmica</span>
+                        <i class="fa-solid fa-chart-line text-rolexGold"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE 2: BODY LOTIONS ==================== -->
+        <section id="page-bodylotions" class="page-view pt-32 pb-20 max-w-7xl mx-auto px-6 space-y-8">
+            
+            <div class="glass-panel p-2 rounded-2xl flex flex-wrap items-center justify-between gap-3 border border-rolexGold/30">
+                <div class="flex items-center space-x-2 px-4 py-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rolexGold"></span>
+                    <span class="text-xs uppercase tracking-wider font-bold text-white font-mono">Sección 1: Body Lotions</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="switchSubpage('contexto')" id="btn-sub-contexto" class="sub-tab-btn px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all bg-rolexGold text-black shadow-md cursor-pointer">
+                        1. Contexto & Impulsores
+                    </button>
+                    <button onclick="switchSubpage('debate')" id="btn-sub-debate" class="sub-tab-btn px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-neutral-300 hover:text-white hover:bg-white/10 cursor-pointer">
+                        2. Debate Globalización
+                    </button>
+                    <button onclick="switchSubpage('estrategia')" id="btn-sub-estrategia" class="sub-tab-btn px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-neutral-300 hover:text-white hover:bg-white/10 cursor-pointer">
+                        3. Implicaciones Gerenciales
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA BODY LOTIONS A (TÍTULO 1) -->
+            <div id="subpage-contexto" class="subpage-view active space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="From Klickpin.com- Bookmark these clever stretch routine ideas that make everything look instantly polished designed to feel inspiring useful and.mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Producción Cinematográfica</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Evolución Global y Análisis Dinámico</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Página 1 del Observatorio</span>
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">Contexto e Impulsores de Globalización</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Análisis riguroso de la industria de Body Lotion (cremas corporales) y los motores económicos y tecnológicos que moldean su expansión internacional.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl glass-panel-hover transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-6 text-xl">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h3 class="font-syne text-xl font-bold text-white mb-3">Definición del Sector</h3>
+                            <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+                                <strong>Body Lotion (Crema corporal):</strong> Producto de textura ligera diseñado para hidratar, suavizar y proteger la piel sin dejar sensación grasosa.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-neutral-800 text-xs text-neutral-400 font-mono">
+                            Fuente: Spherical Insights
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl glass-panel-hover transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-6 text-xl">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            <h3 class="font-syne text-xl font-bold text-white mb-3">Dimensión del Mercado</h3>
+                            <ul class="space-y-2 text-sm text-neutral-300">
+                                <li class="flex items-center justify-between">
+                                    <span class="text-neutral-400">Actualidad:</span>
+                                    <strong class="text-white font-mono">&gt; USD 10.000M</strong>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-neutral-400">Crecimiento Anual:</span>
+                                    <strong class="text-rolexGold font-mono">4% a 5%</strong>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-neutral-400">Año 2025:</span>
+                                    <strong class="text-white font-mono">USD 21,83 mil M</strong>
+                                </li>
+                                <li class="flex items-center justify-between">
+                                    <span class="text-neutral-400">Proyección 2034 (CAGR 9.7%):</span>
+                                    <strong class="text-rolexGold font-mono">USD 50,22 mil M</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-neutral-800 text-xs text-neutral-400 font-mono">
+                            Fuentes: Spherical Insights, Fortune Business Insights
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl glass-panel-hover transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-6 text-xl">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <h3 class="font-syne text-xl font-bold text-white mb-3">Dinámica Geográfica</h3>
+                            <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+                                <strong>Europa</strong> concentra la mayor parte de los ingresos, mientras que <strong>Asia-Pacífico</strong> presenta el crecimiento más acelerado.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-neutral-800 text-xs text-neutral-400 font-mono">
+                            Análisis Regional Global MINDS
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-6 text-rolexGold/10 font-syne font-extrabold text-6xl pointer-events-none">01</div>
+                        <h3 class="font-syne text-xl font-bold text-white mb-4">1. Digitalización y Comercio Electrónico (E-commerce)</h3>
+                        <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+                            La digitalización ha permitido que las marcas vendan directamente a consumidores globales mediante plataformas digitales, marketplaces y modelos Direct to Consumer (D2C).
+                        </p>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800 mb-4">
+                            <span class="text-xs text-rolexGold font-mono uppercase block mb-1">Casos de Éxito Aplicados:</span>
+                            <p class="text-xs text-neutral-300"><strong>CeraVe</strong> (TikTok) y <strong>Glossier</strong> (marca digital).</p>
+                        </div>
+                        <div class="text-xs text-neutral-400 font-mono">
+                            Fuentes: McKinsey & Company, Portafolio
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-6 text-rolexGold/10 font-syne font-extrabold text-6xl pointer-events-none">02</div>
+                        <h3 class="font-syne text-xl font-bold text-white mb-4">2. Reducción de Barreras y Armonización Regulatoria</h3>
+                        <p class="text-neutral-300 text-sm leading-relaxed mb-4">
+                            Los tratados comerciales y la estandarización de normas han reducido aranceles y facilitado la exportación, permitiendo producir a gran escala y disminuir costos.
+                        </p>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800 mb-4">
+                            <span class="text-xs text-rolexGold font-mono uppercase block mb-1">Marcos Legales y Tratados:</span>
+                            <p class="text-xs text-neutral-300">Regulación europea <strong>CE 1223/2009</strong> y uso del <strong>T-MEC</strong> por Beiersdorf (Nivea).</p>
+                        </div>
+                        <div class="text-xs text-neutral-400 font-mono">
+                            Fuentes: Organización Mundial del Comercio (OMC), Cosmetics Europe
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchPage('inicio')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Inicio
+                    </button>
+                    <button onclick="switchSubpage('debate')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Siguiente: Debate Globalización <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA BODY LOTIONS B (TÍTULO 2 CON EL CARD DE RETAIL DIGITAL AÑADIDO AL FINAL) -->
+            <div id="subpage-debate" class="subpage-view space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="From Klickpin.com- Bookmark these clever stretch routine ideas that make everything look instantly polished designed to feel inspiring useful and.mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Análisis Estructural Visual</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Debate Crítico: Pros y Contras Globales</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Página 2 del Observatorio</span>
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">Debate de la Globalización: Pros y Contras</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Contrastación analítica de las ventajas competitivas frente a las vulnerabilidades estructurales en la cadena de suministro cosmética global.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-rolexGold">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-rolexGold/10 flex items-center justify-center text-rolexGold text-xl">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-syne text-2xl font-bold text-white">Beneficios Directos</h3>
+                                <span class="text-xs text-rolexGold font-mono">Oportunidades y Crecimiento</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-black/40 p-5 rounded-xl border border-neutral-800">
+                                <h4 class="font-bold text-white text-base mb-2 flex items-center space-x-2">
+                                    <i class="fa-solid fa-microchip text-rolexGold"></i>
+                                    <span>1. Transferencia Tecnológica e Innovación</span>
+                                </h4>
+                                <p class="text-neutral-300 text-sm leading-relaxed">
+                                    Acceso a tecnologías avanzadas para el desarrollo de lociones corporales.
+                                </p>
+                                <span class="block mt-2 text-xs text-neutral-400 font-mono">Fuente: Fortune Business Insights</span>
+                            </div>
+
+                            <div class="bg-black/40 p-5 rounded-xl border border-neutral-800">
+                                <h4 class="font-bold text-white text-base mb-2 flex items-center space-x-2">
+                                    <i class="fa-solid fa-earth-americas text-rolexGold"></i>
+                                    <span>2. Acceso a Mercados Internacionales</span>
+                                </h4>
+                                <p class="text-neutral-300 text-sm leading-relaxed">
+                                    Proyecciones del mercado con un crecimiento constante.
+                                </p>
+                                <span class="block mt-2 text-xs text-neutral-400 font-mono">Fuente: Global Growth Insights & 360 Research</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-ferrariRed">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-ferrariRed/10 flex items-center justify-center text-ferrariRed text-xl">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-syne text-2xl font-bold text-white">Desafíos Estructurales</h3>
+                                <span class="text-xs text-ferrariRed font-mono">Riesgos y Amenazas Globales</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-black/40 p-5 rounded-xl border border-neutral-800">
+                                <h4 class="font-bold text-white text-base mb-2 flex items-center space-x-2">
+                                    <i class="fa-solid fa-truck-ramp-box text-ferrariRed"></i>
+                                    <span>1. Cadena de Suministro Global</span>
+                                </h4>
+                                <p class="text-neutral-300 text-sm leading-relaxed">
+                                    Dependencia de pocos proveedores y aranceles sobre aluminio y acero.
+                                </p>
+                            </div>
+
+                            <div class="bg-black/40 p-5 rounded-xl border border-neutral-800">
+                                <h4 class="font-bold text-white text-base mb-2 flex items-center space-x-2">
+                                    <i class="fa-solid fa-seedling text-ferrariRed"></i>
+                                    <span>2. Sostenibilidad e Identidad Cultural</span>
+                                </h4>
+                                <p class="text-neutral-300 text-sm leading-relaxed">
+                                    Nuevas normativas de empaques e invisibilización de origen en ingredientes locales.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Caso de Retail Digital (Añadida exactamente como la solicitaste) -->
+                <div class="glass-panel rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl grid grid-cols-1 md:grid-cols-2">
+                    <div class="relative min-h-[300px] md:min-h-full bg-neutral-900 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop" alt="Retail Digital Body Lotion" class="absolute inset-0 w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-neutral-900/90 hidden md:block"></div>
+                    </div>
+                    <div class="p-8 md:p-12 flex flex-col justify-center space-y-4">
+                        <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Caso de Retail Digital</span>
+                        <h3 class="font-syne text-2xl md:text-3xl font-bold text-white">El lujo también se distribuye en la nube</h3>
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Body lotions "celeb-approved" llegan hoy a mercados globales a través de retailers de lujo 100% digitales como <strong>Net-a-Porter</strong>, sin necesidad de tienda física local — la prueba más directa del impulsor de digitalización y e-commerce descrito arriba.
+                        </p>
+                        <div class="pt-4 border-t border-neutral-800 text-xs text-neutral-400 font-mono">
+                            Referencia editorial: Net-a-Porter, Beauty Edit
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchSubpage('contexto')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Contexto
+                    </button>
+                    <button onclick="switchSubpage('estrategia')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Siguiente: Implicaciones Gerenciales <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA BODY LOTIONS C (TÍTULO 3) -->
+            <div id="subpage-estrategia" class="subpage-view space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="From Klickpin.com- Bookmark these clever stretch routine ideas that make everything look instantly polished designed to feel inspiring useful and.mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Ingeniería Estratégica & Nearshoring</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Hoja de Ruta Gerencial Global</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Página 3 del Observatorio</span>
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">Implicaciones Gerenciales y Recomendaciones</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Estrategias corporativas accionables para tomadores de decisiones en la industria cosmética global.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between glass-panel-hover transition-all">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-4">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <h3 class="font-syne text-lg font-bold text-white mb-2">Diversificación y Nearshoring</h3>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Diversificar proveedores globales y manufactura de proximidad.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-neutral-800 text-[10px] text-rolexGold font-mono">
+                            Acción Gerencial Prioritaria
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between glass-panel-hover transition-all">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-4">
+                                <i class="fa-solid fa-handshake"></i>
+                            </div>
+                            <h3 class="font-syne text-lg font-bold text-white mb-2">Comercio Justo (Fairtrade)</h3>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Garantizar precios justos. Ejemplo: L'Occitane en Burkina Faso con 17.000 mujeres.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-neutral-800 text-[10px] text-rolexGold font-mono">
+                            Impacto Social & Reputacional
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between glass-panel-hover transition-all">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-4">
+                                <i class="fa-solid fa-file-shield"></i>
+                            </div>
+                            <h3 class="font-syne text-lg font-bold text-white mb-2">Armonización Regulatoria</h3>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Adoptar estándares globales (ej. Reglamento CE 1223/2009) y tratados como el T-MEC.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-neutral-800 text-[10px] text-rolexGold font-mono">
+                            Mitigación Legal
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between glass-panel-hover transition-all">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-rolexGold/10 flex items-center justify-center text-rolexGold mb-4">
+                                <i class="fa-solid fa-bullhorn"></i>
+                            </div>
+                            <h3 class="font-syne text-lg font-bold text-white mb-2">Sostenibilidad Multicultural</h3>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Integrar fórmulas orgánicas y envases sostenibles con impacto social positivo.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-neutral-800 text-[10px] text-rolexGold font-mono">
+                            Expansión Comercial
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchSubpage('debate')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Debate
+                    </button>
+                    <button onclick="switchPage('patentes'); switchPatentesSub('tecnologia');" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Ir al Caso 2: Patente Sísmica <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ==================== PAGE 3: PATENTE SÍSMICA (CASO CALI) ==================== -->
+        <section id="page-patentes" class="page-view pt-32 pb-20 max-w-7xl mx-auto px-6 space-y-8">
+            
+            <div class="glass-panel p-2 rounded-2xl flex flex-wrap items-center justify-between gap-3 border border-rolexGold/30 shadow-2xl">
+                <div class="flex items-center space-x-2 px-4 py-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-ferrariRed animate-ping"></span>
+                    <span class="text-xs uppercase tracking-wider font-bold text-white font-mono">Caso Cali: Resiliencia Sísmica</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="switchPatentesSub('tecnologia')" id="btn-pat-tecnologia" class="pat-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all bg-rolexGold text-black shadow-md cursor-pointer">1. Dispositivo & Pitch</button>
+                    <button onclick="switchPatentesSub('hill')" id="btn-pat-hill" class="pat-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-neutral-300 hover:text-white hover:bg-white/10 cursor-pointer">2. Marco Charles Hill</button>
+                    <button onclick="switchPatentesSub('ia')" id="btn-pat-ia" class="pat-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-neutral-300 hover:text-white hover:bg-white/10 cursor-pointer">3. Bitácora Debate IA</button>
+                    <button onclick="switchPatentesSub('negocio')" id="btn-pat-negocio" class="pat-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-neutral-300 hover:text-white hover:bg-white/10 cursor-pointer">4. Modelo & Fondo Milagro</button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA PATENTES 1 -->
+            <div id="patsub-tecnologia" class="subpage-view active space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="VIDEO PATENTE (1).mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Dispositivo & Pitch</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Dispositivo de Aislamiento y Rigidez Negativa</h2>
+                    </div>
+                </div>
+
+                <!-- Cuadro de Cita -->
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-gradient-to-br from-neutral-900 via-charcoal to-black p-10 md:p-14">
+                    <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-rolexGold/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-4xl space-y-6">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block">Ficha Técnica Patente GB2583164B</span>
+                        <h2 class="font-syne text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                            "Reconstruir un puente colapsado cuesta hasta <span class="text-rolexGold">20 veces más</span> que prevenir el colapso. La pregunta no es si podemos pagar esta tecnología — es si podemos pagar no tenerla."
+                        </h2>
+                        <p class="text-neutral-300 text-sm md:text-base font-light leading-relaxed">
+                            Desarrollado por la Universidad Shijiazhuang Tiedao (China) y registrado en el Reino Unido, este sistema revoluciona la ingeniería civil aplicando <strong>rigidez negativa</strong> para absorber sismos severos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white flex items-center space-x-3">
+                        <i class="fa-solid fa-file-contract text-rolexGold"></i>
+                        <span>Ficha Oficial de la Patente</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800">
+                            <span class="text-xs text-neutral-400 block font-mono">Número de Patente</span>
+                            <strong class="text-white text-base">GB2583164B</strong>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800">
+                            <span class="text-xs text-neutral-400 block font-mono">Titular / Universidad</span>
+                            <strong class="text-white text-base">Shijiazhuang Tiedao Univ. (China)</strong>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800">
+                            <span class="text-xs text-neutral-400 block font-mono">Inventor</span>
+                            <strong class="text-white text-base">Shitong Chen</strong>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800">
+                            <span class="text-xs text-neutral-400 block font-mono">Oficina de Registro</span>
+                            <strong class="text-white text-base">UK Intellectual Property Office</strong>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800">
+                            <span class="text-xs text-neutral-400 block font-mono">Clasificación Internacional</span>
+                            <strong class="text-white text-base">E01D 19/04 (Ingeniería de Puentes)</strong>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded-xl border border-neutral-800 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-neutral-400 block font-mono">Enlace Oficial</span>
+                                <strong class="text-rolexGold text-sm">Google Patents</strong>
+                            </div>
+                            <a href="https://patents.google.com/patent/GB2583164B/en" target="_blank" class="px-3 py-1.5 bg-rolexGold text-black rounded text-xs font-bold hover:bg-white transition-colors">
+                                <i class="fa-solid fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl space-y-6">
+                        <div class="w-12 h-12 rounded-xl bg-rolexGold/10 flex items-center justify-center text-rolexGold text-xl">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h3 class="font-syne text-2xl font-bold text-white">¿Cómo Funciona el Dispositivo?</h3>
+                        <p class="text-neutral-300 text-sm leading-relaxed">
+                            Imagina un puente de vigas continuas apoyado sobre pilares. En un sismo, viga y pilar se mueven a velocidades distintas; si están rígidamente conectados, se generan fuerzas destructivas que agrietan la estructura. Este dispositivo se instala entre la viga y un pilar móvil con 5 componentes clave:
+                        </p>
+                        <ul class="space-y-3 text-xs text-neutral-300">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-rolexGold mt-0.5"></i>
+                                <span><strong>Dispositivo de activación:</strong> Fijado a la viga, "siente" el inicio del movimiento sísmico.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-rolexGold mt-0.5"></i>
+                                <span><strong>Dispositivo deslizante:</strong> Permite desplazamiento en tensión y compresión sin bloqueo.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-rolexGold mt-0.5"></i>
+                                <span><strong>Resortes de rigidez positiva:</strong> Resortes convencionales (a más empuje, mayor resistencia).</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-rolexGold mt-0.5"></i>
+                                <span><strong>Resortes de rigidez negativa (El núcleo inteligente):</strong> Ayudan al movimiento en un rango específico, contrarrestando el bloqueo.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-rolexGold mt-0.5"></i>
+                                <span><strong>Amortiguador:</strong> Disipa la energía cinética en forma de calor para frenar la oscilación.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col justify-between space-y-6 border-l-4 border-rolexGold">
+                        <div class="space-y-4">
+                            <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Analogía</span>
+                            <h3 class="font-syne text-2xl font-bold text-white">"Doblar las Rodillas"</h3>
+                            <p class="text-neutral-300 text-sm leading-relaxed">
+                                Es como la diferencia entre pararte totalmente rígido cuando alguien te empuja (te caes y te rompes) o <strong>doblar las rodillas y absorber el impacto</strong> (te mantienes en pie). 
+                            </p>
+                            <p class="text-neutral-300 text-sm leading-relaxed">
+                                Al combinar rigidez positiva y negativa, el sistema logra una rigidez efectiva casi nula ante frecuencias sísmicas: el puente se mueve suavemente absorbiendo el golpe en vez de resistir de frente.
+                            </p>
+                        </div>
+                        <div class="bg-black/50 p-4 rounded-xl border border-neutral-800 text-xs text-neutral-400 font-mono">
+                            Idea central: La estructura no "pelea" contra el temblor; lo disipa de forma inteligente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6 border border-rolexGold/40 bg-gradient-to-r from-neutral-900 via-cardBg to-neutral-900">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-rolexGold/20 flex items-center justify-center text-rolexGold">
+                            <i class="fa-solid fa-microphone-lines"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-rolexGold font-mono uppercase">propuesta</span>
+                            <h3 class="font-syne text-xl font-bold text-white">Discurso Ejecutivo de Propuesta</h3>
+                        </div>
+                    </div>
+                    
+                    <blockquote class="border-l-4 border-rolexGold pl-6 italic text-neutral-200 text-base leading-relaxed">
+                        "Cali vive sobre fallas geológicas activas y depende de sus puentes para todo: evacuación, comercio, el corredor a Buenaventura. Hoy, un sismo fuerte no solo pone en riesgo vidas — puede aislar a la ciudad y paralizar el comercio del suroccidente colombiano por meses.<br><br>
+                        Tenemos acceso a una tecnología china, patentada y publicada en el Reino Unido, que no resiste el sismo — lo absorbe. Un dispositivo de aislamiento de vigas que reduce drásticamente el riesgo de colapso, ya probado en principio de ingeniería y listo para adaptarse a nuestra normativa sísmica.<br><br>
+                        No proponemos importarlo a ciegas: proponemos licenciar la tecnología, fabricar los componentes estructurales aquí en Yumbo, y validar su comportamiento con la Universidad del Valle antes de instalar un solo dispositivo."
+                    </blockquote>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchPage('bodylotions'); switchSubpage('estrategia');" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Body Lotions
+                    </button>
+                    <button onclick="switchPatentesSub('hill')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Siguiente: Marco Charles Hill <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA PATENTES 2 -->
+            <div id="patsub-hill" class="subpage-view space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="VIDEO PATENTE (1).mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Marco Teórico & Contexto Global</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">El Marco de Charles Hill y la Globalización Tecnológica</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">El Marco de Charles Hill y la Globalización Tecnológica</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Análisis fundamentado en el texto guía para explicar cómo la tecnología pasó de China a Colombia.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-ferrariRed space-y-4">
+                    <span class="text-xs text-ferrariRed font-mono uppercase font-bold">Realidad Regional • Sismo del 10 de Agosto de 2026</span>
+                    <h3 class="font-syne text-2xl font-bold text-white">¿Por qué este trabajo no es un ejercicio hipotético?</h3>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        El 10 de agosto de 2026, un sismo de magnitud 7,4 con epicentro en Chocó golpeó al suroccidente colombiano. Dejó afectaciones en <strong>37 corredores viales y 11 puentes</strong> del Valle. Dos puentes vehiculares clave quedaron con tránsito totalmente restringido: el <strong>puente Omar Torrijos</strong> (Roldanillo–Zarzal) y el <strong>puente Mariano Ospina Pérez</strong> (La Unión–La Victoria). El Gobierno Nacional estimó la reconstrucción en <strong>$30 billones</strong> (~USD 9.500 millones), creándose el <strong>‘Fondo Milagro’</strong> (Decreto 1261 de 2026) con un crédito del Banco Mundial de USD 200 millones.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white flex items-center space-x-3">
+                        <i class="fa-solid fa-book text-rolexGold"></i>
+                        <span>Análisis Académico (Charles Hill)</span>
+                    </h3>
+                    <div class="text-neutral-300 text-sm leading-relaxed space-y-4 font-light">
+                        <p>
+                            La patente GB2583164, titulada <em>“Negative stiffness vibration reduction and isolation device for continuous beam”</em>, es un ejemplo claro de cómo la globalización permite que una tecnología nacida en un lugar llegue a mercados internacionales. Se trata de un dispositivo de aislamiento sísmico desarrollado por investigadores de la Universidad Shijiazhuang Tiedao, en China, pero registrado y publicado como patente en el Reino Unido. Esto es posible gracias a varios factores que Hill describe en su libro sobre negocios internacionales.
+                        </p>
+                        <p>
+                            Uno de esos factores es la caída de las barreras al comercio y a la inversión, que facilita que instituciones de un país protejan y comercialicen su propiedad intelectual en otros. Gracias a los sistemas de patentes internacionales y a los acuerdos comerciales, una universidad china puede registrar su invento fuera de sus fronteras sin enfrentar restricciones excesivas. A esto se suman los avances en telecomunicaciones —como el acceso a bases de datos de patentes en línea, el correo electrónico y las videoconferencias— que permiten que un inventor coordine con abogados extranjeros y gestione todo el trámite sin necesidad de viajar físicamente.
+                        </p>
+                        <p>
+                            También influye el transporte más rápido y económico, que hace posible que, una vez patentada, la tecnología se materialice en productos físicos —como los amortiguadores del dispositivo— y que estos puedan fabricarse en un país e instalarse en obras de infraestructura en otro. En conjunto, estas condiciones (reglas comerciales más abiertas, comunicación rápida y logística eficiente) explican por qué una innovación de ingeniería civil desarrollada en China puede terminar protegida legalmente y aplicada en proyectos de puentes en el Reino Unido, en Colombia o en cualquier otro país.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Video explicativo añadido al final de la página de Charles Hill -->
+                <div class="glass-panel p-8 rounded-2xl space-y-6 border border-rolexGold/30">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-4">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-rolexGold font-mono font-bold">Animación Técnica Explicativa</span>
+                            <h3 class="font-syne text-2xl font-bold text-white mt-1">Funcionamiento Dinámico y Componentes del Dispositivo</h3>
+                        </div>
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/10 border border-rolexGold/30 text-rolexGold text-xs font-mono">VIDEO PATENTE.mp4</span>
+                    </div>
+
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-black aspect-video flex items-center justify-center border border-neutral-800 group">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-95 group-hover:opacity-100 transition-opacity">
+                            <source src="VIDEO PATENTE.mp4" type="video/mp4">
+                            Tu navegador no soporta videos HTML5.
+                        </video>
+                        <div class="absolute bottom-4 left-4 bg-black/80 backdrop-blur-md px-4 py-2 rounded-lg text-xs text-white font-mono border border-neutral-700 pointer-events-none flex items-center shadow-lg">
+                            <i class="fa-solid fa-circle-play text-rolexGold mr-3"></i> Componentes: Activación, Deslizamiento, Resortes & Rigidez Efectiva ~ 0
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchPatentesSub('tecnologia')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Dispositivo & Pitch
+                    </button>
+                    <button onclick="switchPatentesSub('ia')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Siguiente: Bitácora Debate IA <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA PATENTES 3 -->
+            <div id="patsub-ia" class="subpage-view space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="VIDEO PATENTE (1).mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Evaluación Socrática & IA</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Bitácora del "Inversionista Escéptico de Cali"</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">Bitácora del "Inversionista Escéptico de Cali"</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Interacción con la IA actuando como consultor hipercrítico para someter a prueba la factibilidad de la patente.</p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border border-rolexGold/40 space-y-3">
+                    <span class="text-xs text-rolexGold font-mono uppercase">Prompt Obligatorio Ingresado a la IA:</span>
+                    <blockquote class="text-xs text-neutral-300 italic bg-black/40 p-4 rounded-xl border border-neutral-800 font-mono">
+                        "Actúa como un consultor de negocios e infraestructura radicado en Cali, Colombia, con una postura hipercrítica. Voy a presentarte la patente [Dispositivo de aislamiento y reducción de vibraciones de rigidez negativa para vigas continuas] para ser importada e implementada en la infraestructura sísmica de Cali. Cuestiona mi idea desde 3 ángulos: 1) Costos de transferencia y licenciamiento internacional, 2) Viabilidad técnica en el contexto de edificación local, y 3) Barreras de importación en Colombia. Hazme 3 preguntas difíciles para poner a prueba mi propuesta."
+                    </blockquote>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white">Resumen del Debate Crítico (Turnos Clave)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-neutral-300">
+                            <thead class="bg-black/60 text-rolexGold font-mono text-xs uppercase border-b border-neutral-800">
+                                <tr>
+                                    <th class="p-4">Ángulo Cuestionado</th>
+                                    <th class="p-4">Pregunta Difícil de la IA</th>
+                                    <th class="p-4">Cómo Respondió el Equipo</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-neutral-800 text-xs">
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Costos de licenciamiento internacional</td>
+                                    <td class="p-4 text-neutral-400">¿Cuál sería el costo total por edificio y qué evidencia hay de que compensa frente a una solución sísmica convencional?</td>
+                                    <td class="p-4 text-neutral-200">Reconocimos que falta un análisis de costo de ciclo de vida comparando la tecnología, comprometiéndonos a presentar la rentabilidad como hipótesis a validar.</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Viabilidad técnica local</td>
+                                    <td class="p-4 text-neutral-400">¿Qué evidencia respalda que el dispositivo funcione bajo la normativa sísmica colombiana y no solo en las pruebas originales?</td>
+                                    <td class="p-4 text-neutral-200">Aceptamos que la patente prueba su principio, no su certificación en Cali; replanteamos la propuesta exigiendo simulaciones y ensayos con Univalle.</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Responsabilidad legal y técnica</td>
+                                    <td class="p-4 text-neutral-400">Si el sistema falla, ¿quién responde: el titular de la patente, el fabricante, el diseñador estructural o el equipo promotor?</td>
+                                    <td class="p-4 text-neutral-200">Corregimos postura: la responsabilidad no recae en el promotor, sino que debe distribuirse contractualmente conforme al marco legal colombiano.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-rolexGold space-y-4">
+                    <h3 class="font-syne text-xl font-bold text-white">Conclusiones del Equipo sobre el Uso de la IA</h3>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        El debate con la IA nos obligó a pasar de una postura defensiva ("la tecnología debe implementarse a toda costa") a una postura evaluativa: <strong>no afirmamos que la patente ya sea viable para Cali, afirmamos que su potencial técnico justifica invertir en los estudios de costos, validación estructural y responsabilidad legal necesarios</strong>. 
+                    </p>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        Identificamos también un límite real de la IA: sus preguntas fueron técnicamente sólidas, pero al no conocer datos locales, sus cuestionamientos permanecieron generales. Las Secciones 4 y 6 resuelven esa limitación con normas, aranceles y cifras reales verificadas.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white flex items-center space-x-3">
+                        <i class="fa-solid fa-images text-rolexGold"></i>
+                        <span>Evidencia Visual: Capturas del Diálogo con la IA</span>
+                    </h3>
+                    <p class="text-neutral-400 text-xs">Registro fotográfico de la interacción socrática realizada durante la sesión de co-pensamiento crítico:</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                        <div class="rounded-xl overflow-hidden border border-neutral-800 bg-black group relative aspect-[3/4]">
+                            <img src="WhatsApp Image 2026-08-30 at 10.44.14 AM.jpeg" alt="Debate IA 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs text-white font-mono">Turno 1: Cuestionamiento de Costos</span>
+                            </div>
+                        </div>
+                        <div class="rounded-xl overflow-hidden border border-neutral-800 bg-black group relative aspect-[3/4]">
+                            <img src="WhatsApp Image 2026-08-30 at 10.44.15 AM.jpeg" alt="Debate IA 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs text-white font-mono">Turno 2: Viabilidad Técnica y NSR-10</span>
+                            </div>
+                        </div>
+                        <div class="rounded-xl overflow-hidden border border-neutral-800 bg-black group relative aspect-[3/4]">
+                            <img src="WhatsApp Image 2026-08-30 at 10.44.16 AM (1).jpeg" alt="Debate IA 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs text-white font-mono">Turno 3: Refutación y Defensa Sólida</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchPatentesSub('hill')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Marco Charles Hill
+                    </button>
+                    <button onclick="switchPatentesSub('negocio')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Siguiente: Modelo de Negocio <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBPÁGINA PATENTES 4 -->
+            <div id="patsub-negocio" class="subpage-view space-y-16">
+                <div class="relative rounded-3xl overflow-hidden border border-rolexGold/30 shadow-2xl bg-black h-[500px] flex items-center justify-center group">
+                    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-700">
+                        <source src="VIDEO PATENTE (1).mp4" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 text-center px-6 max-w-3xl pointer-events-none">
+                        <span class="px-4 py-1.5 rounded-full bg-rolexGold/20 border border-rolexGold/50 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3 backdrop-blur-md">Estrategia Comercial & Financiera</span>
+                        <h2 class="font-syne text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Modelo de Negocio e Inserción en el Valle del Cauca</h2>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-rolexGold pl-6">
+                    <h2 class="font-syne text-3xl md:text-4xl font-bold text-white mt-1">Modelo de Negocio e Inserción en el Valle del Cauca</h2>
+                    <p class="text-neutral-400 mt-2 max-w-3xl">Estructuración legal, arancelaria y financiera para aplicar la patente ante la reconstrucción del sismo de agosto de 2026.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-rolexGold space-y-4">
+                    <span class="text-xs text-rolexGold font-mono uppercase">El Modelo en una Frase</span>
+                    <blockquote class="text-lg font-syne font-bold text-white">
+                        “Licenciamos la patente china, fabricamos la mayor parte del sistema en el Valle del Cauca, lo validamos con la Universidad del Valle bajo la norma NSR-10, y lo financiamos con los recursos que el Gobierno ya destinó a la reconstrucción tras el sismo del 10 de agosto.”
+                    </blockquote>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white">Barreras de Entrada y Estrategias de Superación</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-black/40 p-5 rounded-xl border border-neutral-800 space-y-2">
+                            <span class="text-xs text-ferrariRed font-mono font-bold">Barrera 1: Arancel del 35% al Acero Chino</span>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Decretos 0264/0265 de 2026 imponen 35% a subpartidas de acero sin TLC. <strong>Superación:</strong> Fabricar localmente el 70-80% (marcos y placas) con SIDOC en Yumbo e importar solo piezas calibradas.
+                            </p>
+                        </div>
+                        <div class="bg-black/40 p-5 rounded-xl border border-neutral-800 space-y-2">
+                            <span class="text-xs text-ferrariRed font-mono font-bold">Barrera 2: Certificación NSR-10</span>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Curadores exigen cumplimiento estricto. <strong>Superación:</strong> Alianza de validación técnica con la Universidad del Valle y fabricantes certificados como MEISA en Cali.
+                            </p>
+                        </div>
+                        <div class="bg-black/40 p-5 rounded-xl border border-neutral-800 space-y-2">
+                            <span class="text-xs text-ferrariRed font-mono font-bold">Barrera 3: Registro de Licencia (DIAN/SIC)</span>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Art. 123 E.T. exige registro de transferencia tecnológica para deducibilidad. <strong>Superación:</strong> Estructurar contrato con asesoría legal en propiedad industrial y Decisión 486 de la CAN.
+                            </p>
+                        </div>
+                        <div class="bg-black/40 p-5 rounded-xl border border-neutral-800 space-y-2">
+                            <span class="text-xs text-ferrariRed font-mono font-bold">Barrera 4: Financiamiento Estatal Restringido</span>
+                            <p class="text-neutral-300 text-xs leading-relaxed">
+                                Déficit fiscal proyectado en 7,4% del PIB. <strong>Superación:</strong> No buscar presupuesto general, sino canalizar recursos del <em>Fondo Milagro</em> y créditos del Banco Mundial.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6">
+                    <h3 class="font-syne text-2xl font-bold text-white">Proyección Financiera e Indicadores (Cifras Reales 2026)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-neutral-300">
+                            <thead class="bg-black/60 text-rolexGold font-mono text-xs uppercase border-b border-neutral-800">
+                                <tr>
+                                    <th class="p-4">Rubro / Concepto</th>
+                                    <th class="p-4">Cifra Referencial</th>
+                                    <th class="p-4">Fuente / Naturaleza del Dato</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-neutral-800 text-xs">
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Costo de reconstruir un puente colapsado</td>
+                                    <td class="p-4 text-rolexGold font-mono">$250.000 millones COP</td>
+                                    <td class="p-4 text-neutral-400">Dato real reportado, reconstrucción Valle</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Presupuesto total plan de reconstrucción nacional</td>
+                                    <td class="p-4 text-rolexGold font-mono">$5,5 billones COP (~USD 1.700M)</td>
+                                    <td class="p-4 text-neutral-400">Dato oficial post-sismo de agosto</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Arancel componentes de acero de China</td>
+                                    <td class="p-4 text-ferrariRed font-mono">35% sobre valor aduanero</td>
+                                    <td class="p-4 text-neutral-400">Decretos 0264 / 0265 de 2026</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Licenciamiento de planos (Shijiazhuang Tiedao)</td>
+                                    <td class="p-4 text-white font-mono">USD 15.000 – 40.000</td>
+                                    <td class="p-4 text-neutral-400">Estimación ilustrativa a validar por equipo</td>
+                                </tr>
+                                <tr class="hover:bg-white/5">
+                                    <td class="p-4 font-bold text-white">Fabricación local por unidad (Yumbo/Jamundí)</td>
+                                    <td class="p-4 text-white font-mono">COP 60 – 120 millones</td>
+                                    <td class="p-4 text-neutral-400">Estimación basada en metalmecánica regional</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-8 border-t border-neutral-800">
+                    <button onclick="switchPatentesSub('ia')" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Bitácora IA
+                    </button>
+                    <button onclick="switchPage('equipo')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                        Ver Directorio Académico <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== PAGE 4: DIRECTORIO Y EQUIPO ==================== -->
+        <section id="page-equipo" class="page-view pt-32 pb-20 max-w-7xl mx-auto px-6 space-y-16">
+            <div class="glass-panel p-10 rounded-3xl relative overflow-hidden border border-rolexGold/30">
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-rolexGold/5 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="px-4 py-1.5 rounded-full bg-rolexGold/10 border border-rolexGold/30 text-rolexGold text-xs font-mono uppercase tracking-widest inline-block mb-3">Directorio Académico & Consultores</span>
+                    <h2 class="font-syne text-3xl font-bold text-white">GLOBAL MINDS Consultores</h2>
+                    <p class="text-neutral-400 text-sm mt-2">Universidad Autónoma de Occidente (UAO) • Programa de Mercadeo y Negocios Internacionales</p>
+                    <p class="text-xs text-rolexGold mt-1 font-mono">Profesor: Edinson Delgado Martínez</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">KM</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Kirleny Mejía Peña</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultora / UAO</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">ER</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Estefanía Restrepo Palacios</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultora / UAO</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">IM</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Isabella Mambuscay Aza</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultora / UAO</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">JJ</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Juan Camilo Jiménez Fajardo</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultor / UAO</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">JL</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Juan Andrés Leyton Marín</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultor / UAO</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/60 p-5 rounded-2xl border border-neutral-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rolexGold to-yellow-800 flex items-center justify-center text-black font-bold font-syne text-lg shadow-md">CH</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Celeste Hernández Pérez</h4>
+                            <span class="text-xs text-rolexGold font-mono">Consultora / UAO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-8">
+                <button onclick="switchPage('patentes'); switchPatentesSub('negocio');" class="px-6 py-3 glass-panel text-white rounded text-sm hover:border-rolexGold transition-all cursor-pointer">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Anterior: Patente Sísmica
+                </button>
+                <button onclick="switchPage('inicio')" class="px-6 py-3 bg-rolexGold text-black font-bold rounded text-sm hover:bg-white transition-all cursor-pointer">
+                    Volver al Inicio <i class="fa-solid fa-house ml-2"></i>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-neutral-800 bg-black py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <span class="font-syne font-bold text-white tracking-wider">GLOBAL MINDS</span>
+                <span class="block text-[10px] text-neutral-400">Universidad Autónoma de Occidente (UAO) • Cali, Colombia</span>
+            </div>
+
+            <p class="text-xs text-neutral-500 text-center md:text-right font-mono">
+                Observatorio Digital de Globalización, Patente Sísmica y Pensamiento Crítico.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Script de Navegación Modular (Páginas y Subpáginas) con Forzado de Video -->
+    <script>
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.add('active');
+                target.style.display = 'block';
+            }
+
+            const navLinks = document.querySelectorAll('nav .nav-link');
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.remove('text-neutral-300');
+                    link.classList.add('text-rolexGold');
+                } else {
+                    link.classList.remove('text-rolexGold');
+                    link.classList.add('text-neutral-300');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchSubpage(subId) {
+            const subpages = document.querySelectorAll('#page-bodylotions .subpage-view');
+            subpages.forEach(sp => {
+                sp.classList.remove('active');
+                sp.style.display = 'none';
+            });
+
+            const targetSub = document.getElementById('subpage-' + subId);
+            if (targetSub) {
+                targetSub.classList.add('active');
+                targetSub.style.display = 'block';
+            }
+
+            const subBtns = document.querySelectorAll('.sub-tab-btn');
+            subBtns.forEach(btn => {
+                btn.classList.remove('bg-rolexGold', 'text-black', 'shadow-md');
+                btn.classList.add('text-neutral-300', 'hover:text-white', 'hover:bg-white/10');
+            });
+
+            const activeBtn = document.getElementById('btn-sub-' + subId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-neutral-300', 'hover:text-white', 'hover:bg-white/10');
+                activeBtn.classList.add('bg-rolexGold', 'text-black', 'shadow-md');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchPatentesSub(patId) {
+            const patSubpages = document.querySelectorAll('#page-patentes .subpage-view');
+            patSubpages.forEach(psp => {
+                psp.classList.remove('active');
+                psp.style.display = 'none';
+            });
+
+            const targetPat = document.getElementById('patsub-' + patId);
+            if (targetPat) {
+                targetPat.classList.add('active');
+                targetPat.style.display = 'block';
+            }
+
+            const patBtns = document.querySelectorAll('.pat-tab-btn');
+            patBtns.forEach(btn => {
+                btn.classList.remove('bg-rolexGold', 'text-black', 'shadow-md');
+                btn.classList.add('text-neutral-300', 'hover:text-white', 'hover:bg-white/10');
+            });
+
+            const activePatBtn = document.getElementById('btn-pat-' + patId);
+            if (activePatBtn) {
+                activePatBtn.classList.remove('text-neutral-300', 'hover:text-white', 'hover:bg-white/10');
+                activePatBtn.classList.add('bg-rolexGold', 'text-black', 'shadow-md');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Three.js Background Animation for Inicio
+        const container = document.getElementById('webgl-container');
+        if (container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const geometry = new THREE.IcosahedronGeometry(3.5, 2);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xC5A059,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.25
+            });
+            const sphereMesh = new THREE.Mesh(geometry, material);
+            scene.add(sphereMesh);
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 150;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.04,
+                color: 0xC5A059,
+                transparent: true,
+                opacity: 0.6
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 7;
+
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - window.innerWidth / 2) * 0.001;
+                mouseY = (event.clientY - window.innerHeight / 2) * 0.001;
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                targetX += (mouseX - targetX) * 0.05;
+                targetY += (mouseY - targetY) * 0.05;
+
+                sphereMesh.rotation.x += 0.003 + targetY;
+                sphereMesh.rotation.y += 0.005 + targetX;
+
+                particlesMesh.rotation.y -= 0.002;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>
